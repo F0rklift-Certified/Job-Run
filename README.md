@@ -4,11 +4,11 @@ An iOS app for managing jobs and optimising daily routes using Google Maps Direc
 
 ## Features
 
-- **Job Management** — Create, edit, and organise jobs with addresses, dates, and notes
-- **Calendar View** — View jobs by month or week with an interactive calendar
-- **Route Optimisation** — Automatically calculates the most efficient route through your daily jobs
-- **Route Map** — Visualise your optimised route on an interactive map
-- **Persistent Storage** — Jobs are saved locally on device
+- **Job Management** - Create, edit and organise jobs with addresses, dates and notes
+- **Calendar View** - View jobs by month or week with an interactive calendar
+- **Route Optimisation** - Automatically calculates the most efficient route through your daily jobs
+- **Route Map** - Visualise your optimised route on an interactive map
+- **Persistent Storage** - Jobs are saved locally on device
 
 ## Setup
 
