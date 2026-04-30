@@ -24,7 +24,7 @@ enum RouteError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .noAPIKey: "Set your Google Maps API key in Settings"
+        case .noAPIKey: "Google Maps API key not configured in Secrets.xcconfig"
         case .noJobs: "No jobs to route"
         case .invalidURL: "Invalid request"
         case .noRouteFound: "No route found between locations"
