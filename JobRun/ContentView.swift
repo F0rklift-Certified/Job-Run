@@ -1,21 +1,17 @@
-//
-//  ContentView.swift
-//  JobRun
-//
-//  Created by NB on 29/4/2026.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State private var jobStore = JobStore()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            CalendarView()
+                .tabItem { Label("Jobs", systemImage: "calendar") }
+
+            SettingsView()
+                .tabItem { Label("Settings", systemImage: "gear") }
         }
-        .padding()
+        .environment(jobStore)
     }
 }
 
