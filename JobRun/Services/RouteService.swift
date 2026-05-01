@@ -49,8 +49,19 @@ class RouteService {
         guard !jobs.isEmpty else { throw RouteError.noJobs }
 
         let addresses = jobs.map { $0.address }
-        let origin = homeAddress.isEmpty ? addresses[0] : homeAddress
-        let destination = homeAddress.isEmpty ? addresses[addresses.count - 1] : homeAddress
+        let origin: String
+        let destination: String
+        let waypointAddresses: [String]
+
+        if homeAddress.isEmpty {
+            origin = addresses[0]
+            destination = addresses[0]
+            waypointAddresses = addresses.count > 1 ? Array(addresses[1...]) : []
+        } else {
+            origin = homeAddress
+            destination = homeAddress
+            waypointAddresses = addresses
+        }
 
         var components = URLComponents(string: "https://maps.googleapis.com/maps/api/directions/json")!
         var queryItems = [
@@ -58,13 +69,6 @@ class RouteService {
             URLQueryItem(name: "destination", value: destination),
             URLQueryItem(name: "key", value: apiKey)
         ]
-
-        let waypointAddresses: [String]
-        if homeAddress.isEmpty {
-            waypointAddresses = addresses.count > 2 ? Array(addresses[1 ..< addresses.count - 1]) : []
-        } else {
-            waypointAddresses = addresses
-        }
 
         if !waypointAddresses.isEmpty {
             let waypointStr = "optimize:true|" + waypointAddresses.joined(separator: "|")
@@ -93,15 +97,15 @@ class RouteService {
 
         let waypointOrder = route["waypoint_order"] as? [Int] ?? []
 
-        let overviewPolyline = route["overview_polyline"] as? [String: Any]
-        let encoded = overviewPolyline?["points"] as? String ?? ""
-        let coordinates = Self.decodePolyline(encoded)
+        let allLegsJson = route["legs"] as? [[String: Any]] ?? []
+        let dropReturnLeg = homeAddress.isEmpty && allLegsJson.count > 1
+        let legsJson = dropReturnLeg ? Array(allLegsJson.dropLast()) : allLegsJson
 
-        let legsJson = route["legs"] as? [[String: Any]] ?? []
         var totalDistMeters = 0
         var totalDurSeconds = 0
         var legs: [RouteLeg] = []
         var stops: [CLLocationCoordinate2D] = []
+        var coordinates: [CLLocationCoordinate2D] = []
 
         for (i, leg) in legsJson.enumerated() {
             let dist = leg["distance"] as? [String: Any]
@@ -112,6 +116,14 @@ class RouteService {
                 distance: dist?["text"] as? String ?? "",
                 duration: dur?["text"] as? String ?? ""
             ))
+
+            let steps = leg["steps"] as? [[String: Any]] ?? []
+            for step in steps {
+                if let stepPolyline = step["polyline"] as? [String: Any],
+                   let encoded = stepPolyline["points"] as? String {
+                    coordinates.append(contentsOf: Self.decodePolyline(encoded))
+                }
+            }
 
             if i == 0, let startLoc = leg["start_location"] as? [String: Any] {
                 let lat = startLoc["lat"] as? Double ?? 0

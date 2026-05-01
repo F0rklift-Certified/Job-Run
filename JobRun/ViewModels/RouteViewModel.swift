@@ -31,15 +31,14 @@ class RouteViewModel {
 
         let homeAddress = RouteService.shared.homeAddress
         if homeAddress.isEmpty {
-            guard jobs.count > 2 else { return jobs }
-            let middle = Array(jobs[1 ..< jobs.count - 1])
+            guard jobs.count > 1 else { return jobs }
+            let remaining = Array(jobs[1...])
             var optimized = [jobs[0]]
             for idx in result.optimizedOrder {
-                if idx < middle.count {
-                    optimized.append(middle[idx])
+                if idx < remaining.count {
+                    optimized.append(remaining[idx])
                 }
             }
-            optimized.append(jobs[jobs.count - 1])
             return optimized
         } else {
             var optimized: [Job] = []
