@@ -8,6 +8,11 @@ struct ContentView: View {
             CalendarView()
                 .tabItem { Label("Jobs", systemImage: "calendar") }
 
+            NavigationStack {
+                DayRouteView(date: .now)
+            }
+            .tabItem { Label("Today", systemImage: "figure.run") }
+
             SettingsView()
                 .tabItem { Label("Settings", systemImage: "gear") }
         }

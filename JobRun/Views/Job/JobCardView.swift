@@ -19,10 +19,6 @@ struct JobCardView: View {
                     .lineLimit(1)
 
                 HStack {
-                    Text(job.date, format: .dateTime.hour().minute())
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-
                     Text(job.status.label)
                         .font(.caption)
                         .fontWeight(.medium)

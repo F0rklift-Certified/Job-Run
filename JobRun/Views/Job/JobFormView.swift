@@ -12,6 +12,10 @@ struct JobFormView: View {
     @State private var date = Date()
     @State private var notes = ""
     @State private var status: JobStatus = .pending
+    @State private var suggestions: [PlacePrediction] = []
+    @State private var searchTask: Task<Void, Never>?
+    @State private var showSuggestions = false
+    @State private var suppressAutocomplete = false
 
     private var isEditing: Bool { existingJob != nil }
 
@@ -28,10 +32,51 @@ struct JobFormView: View {
 
                 TextField("Address", text: $address)
                     .textContentType(.fullStreetAddress)
+                    .autocorrectionDisabled()
+                    .onChange(of: address) { _, newValue in
+                        searchTask?.cancel()
+                        guard !suppressAutocomplete else {
+                            suppressAutocomplete = false
+                            return
+                        }
+                        guard !newValue.trimmingCharacters(in: .whitespaces).isEmpty else {
+                            suggestions = []
+                            showSuggestions = false
+                            return
+                        }
+                        searchTask = Task {
+                            try? await Task.sleep(for: .milliseconds(300))
+                            guard !Task.isCancelled else { return }
+                            let results = (try? await PlacesService.shared.autocomplete(query: newValue)) ?? []
+                            guard !Task.isCancelled else { return }
+                            suggestions = results
+                            showSuggestions = !results.isEmpty
+                        }
+                    }
+
+                if showSuggestions {
+                    ForEach(suggestions) { suggestion in
+                        Button {
+                            suppressAutocomplete = true
+                            address = suggestion.description
+                            suggestions = []
+                            showSuggestions = false
+                        } label: {
+                            HStack {
+                                Image(systemName: "mappin.and.ellipse")
+                                    .foregroundStyle(.secondary)
+                                Text(suggestion.description)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.primary)
+                                    .multilineTextAlignment(.leading)
+                            }
+                        }
+                    }
+                }
             }
 
             Section("Schedule") {
-                DatePicker("Date & Time", selection: $date)
+                DatePicker("Date", selection: $date, displayedComponents: .date)
             }
 
             Section("Notes") {
@@ -94,6 +139,7 @@ struct JobFormView: View {
         .onAppear {
             if let job = existingJob {
                 clientName = job.clientName
+                suppressAutocomplete = true
                 address = job.address
                 date = job.date
                 notes = job.notes

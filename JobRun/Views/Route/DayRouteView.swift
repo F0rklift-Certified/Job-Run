@@ -16,6 +16,7 @@ struct DayRouteView: View {
                     routeInfoCard(result)
 
                     RouteMapView(routeResult: result)
+                        .frame(minWidth: 1, minHeight: 1)
                         .frame(height: 300)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .padding(.horizontal)
@@ -114,9 +115,6 @@ struct DayRouteView: View {
                             .font(.subheadline.bold())
                         Text(job.address)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(job.date, format: .dateTime.hour().minute())
-                            .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
 

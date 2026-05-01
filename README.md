@@ -8,16 +8,17 @@ An iOS app for managing jobs and optimising daily routes using Google Maps Direc
 - **Calendar View** - View jobs by month or week with an interactive calendar
 - **Route Optimisation** - Automatically calculates the most efficient route through your daily jobs
 - **Route Map** - Visualise your optimised route on an interactive map
+- **Address Autocomplete** - Google Places powered address suggestions when adding jobs
 - **Persistent Storage** - Jobs are saved locally on device
 
 ## Setup
 
 ### Google Maps API Key
 
-This app requires a Google Maps API key with the **Directions API** enabled.
+This app requires a Google Maps API key with the **Directions API** and **Places API** enabled.
 
 1. Get a key from the [Google Cloud Console](https://console.cloud.google.com/)
-2. Enable the **Directions API** for your project
+2. Enable the **Directions API** and **Places API** for your project
 3. Create the secrets config file:
    ```
    cp JobRun/Configurations/Secrets.xcconfig.example JobRun/Configurations/Secrets.xcconfig
@@ -45,6 +46,7 @@ JobRun/
 ├── Models/
 │   └── Job.swift               # Job data model
 ├── Services/
+│   ├── PlacesService.swift     # Google Places Autocomplete API client
 │   ├── RouteService.swift      # Google Maps Directions API client
 │   └── StorageService.swift    # Local persistence
 ├── ViewModels/
