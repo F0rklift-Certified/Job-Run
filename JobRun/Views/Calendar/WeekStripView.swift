@@ -19,53 +19,81 @@ struct WeekStripView: View {
     }
 
     var body: some View {
-        VStack(spacing: 8) {
-            HStack {
-                Button { changeWeek(by: -1) } label: {
-                    Image(systemName: "chevron.left")
-                }
-                Spacer()
-                Text(weekRangeText)
-                    .font(.headline)
-                Spacer()
-                Button { changeWeek(by: 1) } label: {
-                    Image(systemName: "chevron.right")
-                }
-            }
-            .padding(.horizontal)
-            .padding(.top, 8)
+        VStack(spacing: 0) {
+            weekNavHeader
+            dayStrip
+                .padding(.bottom, 16)
+        }
+    }
 
-            HStack(spacing: 4) {
+    private var weekNavHeader: some View {
+        HStack {
+            Button { changeWeek(by: -1) } label: {
+                Image(systemName: "chevron.left")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 32, height: 32)
+            }
+            Spacer()
+            Text(weekRangeText)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Button { changeWeek(by: 1) } label: {
+                Image(systemName: "chevron.right")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 32, height: 32)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 8)
+        .padding(.bottom, 4)
+    }
+
+    private var dayStrip: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
                 ForEach(weekDates, id: \.self) { date in
                     let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
+                    let isToday = calendar.isDateInToday(date)
 
-                    VStack(spacing: 4) {
-                        Text(date, format: .dateTime.weekday(.abbreviated))
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                    Button {
+                        withAnimation(.spring(response: 0.25)) { selectedDate = date }
+                    } label: {
+                        VStack(spacing: 6) {
+                            Text(date, format: .dateTime.weekday(.abbreviated))
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundStyle(isSelected ? Color.white.opacity(0.9) : Color.secondary)
+                                .textCase(.uppercase)
 
-                        Text("\(calendar.component(.day, from: date))")
-                            .font(.system(.callout, weight: calendar.isDateInToday(date) ? .bold : .regular))
-                            .foregroundStyle(isSelected ? .white : .primary)
+                            Text("\(calendar.component(.day, from: date))")
+                                .font(.system(size: 22, weight: isToday || isSelected ? .heavy : .regular))
+                                .foregroundStyle(isSelected ? Color.white : Color.primary)
 
-                        if jobStore.hasJobs(on: date) {
                             Circle()
-                                .fill(isSelected ? .white : .blue)
-                                .frame(width: 4, height: 4)
-                        } else {
-                            Circle().fill(.clear).frame(width: 4, height: 4)
+                                .fill(
+                                    isSelected
+                                        ? Color.white.opacity(0.6)
+                                        : (jobStore.hasJobs(on: date) ? Color.green : Color.clear)
+                                )
+                                .frame(width: 5, height: 5)
+                        }
+                        .frame(width: 44, height: 72)
+                        .background {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(isSelected ? Color.green : Color.white)
+                            if !isSelected {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color(.systemGray5), lineWidth: 1)
+                            }
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(isSelected ? Color.blue : Color.clear)
-                    )
-                    .onTapGesture { selectedDate = date }
+                    .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 20)
         }
     }
 
