@@ -180,3 +180,17 @@ struct JobFormView: View {
         dismiss()
     }
 }
+
+#Preview("New Job") {
+    NavigationStack {
+        JobFormView()
+    }
+    .environment(JobStore())
+}
+
+#Preview("Edit Job") {
+    NavigationStack {
+        JobFormView(existingJob: Job(clientName: "John Smith", address: "123 Main St, Sydney NSW", date: .now, notes: "Ring doorbell twice"))
+    }
+    .environment(JobStore())
+}

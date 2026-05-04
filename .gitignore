@@ -17,6 +17,9 @@ xcuserdata/
 # Secrets
 JobRun/Configurations/Secrets.xcconfig
 
+# Claude
+.claude/
+
 # macOS
 .DS_Store
 *.swp

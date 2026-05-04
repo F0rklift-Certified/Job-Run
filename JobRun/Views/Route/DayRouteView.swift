@@ -193,3 +193,10 @@ struct DayRouteView: View {
         }
     }
 }
+
+#Preview {
+    NavigationStack {
+        DayRouteView(date: .now)
+    }
+    .environment(JobStore())
+}

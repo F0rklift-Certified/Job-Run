@@ -112,3 +112,17 @@ struct DayCellView: View {
         )
     }
 }
+
+#Preview("Month Grid") {
+    MonthGridView(selectedDate: .constant(.now))
+        .environment(JobStore())
+}
+
+#Preview("Day Cell") {
+    HStack {
+        DayCellView(date: .now, isSelected: false, isToday: true, jobCount: 2)
+        DayCellView(date: .now, isSelected: true, isToday: false, jobCount: 1)
+        DayCellView(date: .now, isSelected: false, isToday: false, jobCount: 0)
+    }
+    .padding()
+}

@@ -139,3 +139,12 @@ struct DayHeaderView: View {
         }
     }
 }
+#Preview("Calendar") {
+    CalendarView()
+        .environment(JobStore())
+}
+
+#Preview("Day Header") {
+    DayHeaderView(selectedDate: .constant(.now))
+}
+

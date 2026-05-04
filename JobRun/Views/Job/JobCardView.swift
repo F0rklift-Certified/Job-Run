@@ -41,3 +41,11 @@ struct JobCardView: View {
         .padding(.vertical, 4)
     }
 }
+
+#Preview {
+    List {
+        JobCardView(job: Job(clientName: "John Smith", address: "123 Main St, Sydney NSW", date: .now))
+        JobCardView(job: Job(clientName: "Jane Doe", address: "456 George St, Sydney NSW", date: .now, status: .complete))
+        JobCardView(job: Job(clientName: "Bob Wilson", address: "789 Pitt St, Sydney NSW", date: .now, status: .cancelled))
+    }
+}

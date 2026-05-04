@@ -39,3 +39,21 @@ struct RouteMapView: View {
         }
     }
 }
+
+#Preview {
+    RouteMapView(routeResult: RouteResult(
+        optimizedOrder: [0, 1],
+        polylineCoordinates: [
+            .init(latitude: -33.8688, longitude: 151.2093),
+            .init(latitude: -33.8708, longitude: 151.2073)
+        ],
+        stopCoordinates: [
+            .init(latitude: -33.8688, longitude: 151.2093),
+            .init(latitude: -33.8708, longitude: 151.2073)
+        ],
+        totalDistance: "5.2 km",
+        totalDuration: "12 min",
+        legs: [RouteLeg(distance: "5.2 km", duration: "12 min")]
+    ))
+    .frame(height: 300)
+}

@@ -82,3 +82,8 @@ struct WeekStripView: View {
         }
     }
 }
+
+#Preview {
+    WeekStripView(selectedDate: .constant(.now))
+        .environment(JobStore())
+}
