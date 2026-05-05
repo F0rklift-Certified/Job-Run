@@ -170,57 +170,50 @@ struct TimelineJobsView: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(alignment: .top) {
-            if jobs.count > 1 {
-                HStack(spacing: 0) {
-                    Spacer().frame(width: 56)
-                    Rectangle()
-                        .fill(Color(.systemGray5))
-                        .frame(width: 1)
-                    Spacer()
-                }
-                .padding(.vertical, 40)
-            }
-        }
     }
 }
 
 struct TimelineRow: View {
     let job: Job
 
-    private var timeString: String {
-        let f = DateFormatter()
-        f.dateFormat = "hh:mm"
-        return f.string(from: job.date)
-    }
-
-    private var amPM: String {
-        Calendar.current.component(.hour, from: job.date) < 12 ? "AM" : "PM"
-    }
-
     var body: some View {
-        HStack(alignment: .top, spacing: 16) {
-            VStack(alignment: .trailing, spacing: 1) {
-                Text(timeString)
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.primary)
-                Text(amPM)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(width: 40, alignment: .trailing)
-
-            JobCardView(job: job)
-        }
+        JobCardView(job: job)
     }
 }
 #Preview("Calendar") {
-    CalendarView()
-        .environment(JobStore())
-}
-
-#Preview("Day Header") {
-    DayHeaderView(selectedDate: .constant(.now))
+    let store = JobStore()
+    let today = Date()
+    store.jobs = [
+        Job(
+            clientName: "Sarah Mitchell",
+            address: "42 Oxford Street, Sydney NSW 2000",
+            date: today,
+            notes: "Front and backyard mowing",
+            status: .pending
+        ),
+        Job(
+            clientName: "James Chen",
+            address: "15 Bondi Road, Bondi NSW 2026",
+            date: today,
+            notes: "Hedge trimming and garden cleanup",
+            status: .complete
+        ),
+        Job(
+            clientName: "Emily Watson",
+            address: "88 King Street, Newtown NSW 2042",
+            date: today,
+            notes: "Pressure wash driveway",
+            status: .pending
+        ),
+        Job(
+            clientName: "David Park",
+            address: "7 Marine Parade, Manly NSW 2095",
+            date: today,
+            notes: "Pool area cleanup",
+            status: .cancelled
+        ),
+    ]
+    return CalendarView()
+        .environment(store)
 }
 
