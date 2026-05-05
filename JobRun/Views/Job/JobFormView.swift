@@ -185,12 +185,12 @@ struct JobFormView: View {
     NavigationStack {
         JobFormView()
     }
-    .environment(JobStore())
+    .environment(MockDataService.makePreviewStore())
 }
 
 #Preview("Edit Job") {
     NavigationStack {
-        JobFormView(existingJob: Job(clientName: "John Smith", address: "123 Main St, Sydney NSW", date: .now, notes: "Ring doorbell twice"))
+        JobFormView(existingJob: MockDataService.generateJobs().first!)
     }
-    .environment(JobStore())
+    .environment(MockDataService.makePreviewStore())
 }

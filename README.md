@@ -31,6 +31,10 @@ This app requires a Google Maps API key with the **Directions API** and **Places
 2. Ensure the **Secrets.xcconfig** is set as the base configuration for the JobRun target (Project > Info > Configurations)
 3. Build and run on a simulator or device
 
+### Mock Data
+
+In debug builds, the app automatically seeds 10 sample jobs when the store is empty. To reset to mock data, erase the simulator (**Device > Erase All Content and Settings**) and re-run.
+
 ## Requirements
 
 - Xcode 26.4+

@@ -11,6 +11,7 @@ struct CalendarView: View {
     @Environment(JobStore.self) private var jobStore
     @State private var selectedDate = Date()
     @State private var showingAddJob = false
+    @State private var showingDatePicker = false
 
     private var selectedDayJobs: [Job] {
         jobStore.jobs(for: selectedDate).sorted { $0.date < $1.date }
@@ -21,6 +22,12 @@ struct CalendarView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     headerSection
+
+                    if showingDatePicker {
+                        inlineCalendarPicker
+                            .transition(.move(edge: .top).combined(with: .opacity))
+                    }
+
                     WeekStripView(selectedDate: $selectedDate)
                         .background(Color.white)
                     Divider()
@@ -52,17 +59,19 @@ struct CalendarView: View {
                     .foregroundStyle(.secondary)
                     .textCase(.uppercase)
                     .tracking(1.2)
-                Text("Calendar")
+                Text("Job Run")
                     .font(.largeTitle)
                     .fontWeight(.heavy)
             }
             Spacer()
             Button {
-                withAnimation(.spring(response: 0.3)) { selectedDate = Date() }
+                withAnimation(.spring(response: 0.3)) {
+                    showingDatePicker.toggle()
+                }
             } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "calendar")
-                    Text("TODAY")
+                    Text("CALENDAR")
                         .tracking(0.5)
                 }
                 .font(.subheadline)
@@ -132,6 +141,39 @@ struct CalendarView: View {
         }
     }
 
+    // MARK: - Inline Calendar Picker
+
+    private var inlineCalendarPicker: some View {
+        VStack(spacing: 0) {
+            DatePicker(
+                "Select Date",
+                selection: $selectedDate,
+                displayedComponents: .date
+            )
+            .datePickerStyle(.graphical)
+            .tint(.green)
+            .padding(.horizontal)
+
+            Button {
+                withAnimation(.spring(response: 0.3)) {
+                    selectedDate = Date()
+                    showingDatePicker = false
+                }
+            } label: {
+                Text("Go to Today")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(Color.green, in: RoundedRectangle(cornerRadius: 10))
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 12)
+        }
+        .background(Color.white)
+    }
+
     // MARK: - FAB
 
     private var addFAB: some View {
@@ -181,39 +223,7 @@ struct TimelineRow: View {
     }
 }
 #Preview("Calendar") {
-    let store = JobStore()
-    let today = Date()
-    store.jobs = [
-        Job(
-            clientName: "Sarah Mitchell",
-            address: "42 Oxford Street, Sydney NSW 2000",
-            date: today,
-            notes: "Front and backyard mowing",
-            status: .pending
-        ),
-        Job(
-            clientName: "James Chen",
-            address: "15 Bondi Road, Bondi NSW 2026",
-            date: today,
-            notes: "Hedge trimming and garden cleanup",
-            status: .complete
-        ),
-        Job(
-            clientName: "Emily Watson",
-            address: "88 King Street, Newtown NSW 2042",
-            date: today,
-            notes: "Pressure wash driveway",
-            status: .pending
-        ),
-        Job(
-            clientName: "David Park",
-            address: "7 Marine Parade, Manly NSW 2095",
-            date: today,
-            notes: "Pool area cleanup",
-            status: .cancelled
-        ),
-    ]
-    return CalendarView()
-        .environment(store)
+    CalendarView()
+        .environment(MockDataService.makePreviewStore())
 }
 

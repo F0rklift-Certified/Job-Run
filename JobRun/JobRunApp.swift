@@ -9,9 +9,21 @@ import SwiftUI
 
 @main
 struct JobRunApp: App {
+    @State private var jobStore: JobStore
+
+    init() {
+        let store = JobStore()
+        #if DEBUG
+        store.jobs = MockDataService.generateJobs()
+        UserDefaults.standard.set("100 George St, Sydney NSW 2000", forKey: "homeAddress")
+        #endif
+        _jobStore = State(initialValue: store)
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(jobStore)
         }
     }
 }

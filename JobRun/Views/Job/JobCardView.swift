@@ -82,9 +82,10 @@ struct JobCardView: View {
 }
 
 #Preview {
+    let jobs = MockDataService.generateJobs()
     List {
-        JobCardView(job: Job(clientName: "John Smith", address: "123 Main St, Sydney NSW", date: .now))
-        JobCardView(job: Job(clientName: "Jane Doe", address: "456 George St, Sydney NSW", date: .now, status: .complete))
-        JobCardView(job: Job(clientName: "Bob Wilson", address: "789 Pitt St, Sydney NSW", date: .now, status: .cancelled))
+        JobCardView(job: jobs[0])
+        JobCardView(job: jobs[2])
+        JobCardView(job: jobs[7])
     }
 }

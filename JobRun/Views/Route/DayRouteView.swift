@@ -11,6 +11,12 @@ struct DayRouteView: View {
     @Environment(JobStore.self) private var jobStore
     @State private var routeVM = RouteViewModel()
     let date: Date
+    private let previewRouteResult: RouteResult?
+
+    init(date: Date, previewRouteResult: RouteResult? = nil) {
+        self.date = date
+        self.previewRouteResult = previewRouteResult
+    }
 
     private var dayJobs: [Job] {
         jobStore.jobs(for: date)
@@ -51,7 +57,9 @@ struct DayRouteView: View {
         .navigationTitle(date.formatted(.dateTime.weekday(.wide).day().month(.abbreviated)))
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            if !dayJobs.isEmpty {
+            if let preview = previewRouteResult {
+                routeVM.routeResult = preview
+            } else if !dayJobs.isEmpty {
                 await routeVM.calculateRoute(for: dayJobs)
             }
         }
@@ -196,7 +204,7 @@ struct DayRouteView: View {
 
 #Preview {
     NavigationStack {
-        DayRouteView(date: .now)
+        DayRouteView(date: .now, previewRouteResult: MockDataService.generateRouteResult())
     }
-    .environment(JobStore())
+    .environment(MockDataService.makePreviewStore())
 }

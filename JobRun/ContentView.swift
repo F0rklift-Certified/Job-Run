@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var jobStore = JobStore()
-
     var body: some View {
         TabView {
             CalendarView()
@@ -23,10 +21,10 @@ struct ContentView: View {
             SettingsView()
                 .tabItem { Label("Settings", systemImage: "gear") }
         }
-        .environment(jobStore)
     }
 }
 
 #Preview {
     ContentView()
+        .environment(MockDataService.makePreviewStore())
 }

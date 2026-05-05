@@ -21,14 +21,31 @@ struct RouteMapView: View {
             }
 
             ForEach(Array(routeResult.stopCoordinates.enumerated()), id: \.offset) { index, coord in
-                Annotation("Stop \(index + 1)", coordinate: coord) {
-                    ZStack {
-                        Circle()
-                            .fill(.blue)
-                            .frame(width: 28, height: 28)
-                        Text("\(index + 1)")
-                            .font(.caption2.bold())
-                            .foregroundStyle(.white)
+                let hasHome = !RouteService.shared.homeAddress.isEmpty
+                let isHome = hasHome && (index == 0 || index == routeResult.stopCoordinates.count - 1)
+
+                if isHome {
+                    Annotation("Starting Address", coordinate: coord) {
+                        ZStack {
+                            Circle()
+                                .fill(.green)
+                                .frame(width: 28, height: 28)
+                            Image(systemName: "house.fill")
+                                .font(.caption2.bold())
+                                .foregroundStyle(.white)
+                        }
+                    }
+                } else {
+                    let stopNumber = hasHome ? index : index + 1
+                    Annotation("Stop \(stopNumber)", coordinate: coord) {
+                        ZStack {
+                            Circle()
+                                .fill(.blue)
+                                .frame(width: 28, height: 28)
+                            Text("\(stopNumber)")
+                                .font(.caption2.bold())
+                                .foregroundStyle(.white)
+                        }
                     }
                 }
             }

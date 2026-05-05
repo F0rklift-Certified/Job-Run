@@ -7,18 +7,22 @@
 
 import Foundation
 
+/// Represents a single address suggestion returned by the Google Places API.
 struct PlacePrediction: Identifiable {
     let id: String
     let description: String
 }
 
+/// Wraps the Google Places Autocomplete API to provide address suggestions as the user types.
 class PlacesService {
     static let shared = PlacesService()
 
+    /// API key loaded at runtime from Info.plist (sourced from Secrets.xcconfig).
     private var apiKey: String {
         Bundle.main.object(forInfoDictionaryKey: "GOOGLE_MAPS_API_KEY") as? String ?? ""
     }
 
+    /// Fetches address autocomplete predictions for the given query string.
     func autocomplete(query: String) async throws -> [PlacePrediction] {
         guard !apiKey.isEmpty else { return [] }
         guard !query.trimmingCharacters(in: .whitespaces).isEmpty else { return [] }

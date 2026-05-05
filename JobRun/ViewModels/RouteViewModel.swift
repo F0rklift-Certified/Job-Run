@@ -7,12 +7,17 @@
 
 import Foundation
 
+/// Manages route calculation state and exposes results/errors to the route UI.
 @Observable
 class RouteViewModel {
+    /// The most recent route calculation result, or `nil` if no route has been calculated yet.
     var routeResult: RouteResult?
+    /// Whether a route calculation is currently in progress.
     var isLoading = false
+    /// A user-facing error message if the last route calculation failed.
     var errorMessage: String?
 
+    /// Calculates an optimized driving route for the given jobs via `RouteService`.
     func calculateRoute(for jobs: [Job]) async {
         guard !jobs.isEmpty else {
             errorMessage = "No jobs to route"
@@ -33,6 +38,7 @@ class RouteViewModel {
         isLoading = false
     }
 
+    /// Reorders jobs based on the optimized route. When no home address is set, the first job is kept as the origin.
     func optimizedJobs(from jobs: [Job]) -> [Job] {
         guard let result = routeResult, !result.optimizedOrder.isEmpty else { return jobs }
 

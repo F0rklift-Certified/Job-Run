@@ -8,11 +8,13 @@
 import Foundation
 import CoreLocation
 
+/// Distance and duration for a single segment between two stops.
 struct RouteLeg {
     let distance: String
     let duration: String
 }
 
+/// The full result of an optimized route calculation, including polyline data for map rendering.
 struct RouteResult {
     let optimizedOrder: [Int]
     let polylineCoordinates: [CLLocationCoordinate2D]
@@ -22,6 +24,7 @@ struct RouteResult {
     let legs: [RouteLeg]
 }
 
+/// Errors that can occur when calculating a driving route.
 enum RouteError: LocalizedError {
     case noAPIKey
     case noJobs
@@ -40,17 +43,21 @@ enum RouteError: LocalizedError {
     }
 }
 
+/// Calculates optimized driving routes between job locations using the Google Directions API.
 class RouteService {
     static let shared = RouteService()
 
+    /// API key loaded at runtime from Info.plist (sourced from Secrets.xcconfig).
     var apiKey: String {
         Bundle.main.object(forInfoDictionaryKey: "GOOGLE_MAPS_API_KEY") as? String ?? ""
     }
 
+    /// The user's home address, used as origin/destination when set; falls back to the first job address.
     var homeAddress: String {
         UserDefaults.standard.string(forKey: "homeAddress") ?? ""
     }
 
+    /// Requests an optimized route through all job addresses and returns decoded polyline, stop coordinates, and leg details.
     func calculateOptimizedRoute(jobs: [Job]) async throws -> RouteResult {
         guard !apiKey.isEmpty else { throw RouteError.noAPIKey }
         guard !jobs.isEmpty else { throw RouteError.noJobs }
@@ -154,6 +161,7 @@ class RouteService {
         )
     }
 
+    /// Decodes a Google-encoded polyline string into an array of coordinates.
     static func decodePolyline(_ encoded: String) -> [CLLocationCoordinate2D] {
         var coordinates: [CLLocationCoordinate2D] = []
         let chars = Array(encoded.utf8)
