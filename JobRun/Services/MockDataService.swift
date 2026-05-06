@@ -47,14 +47,14 @@ enum MockDataService {
                 address: "7 Beach Rd, Bondi NSW 2026",
                 date: today,
                 notes: "Weekly lawn maintenance",
-                status: .complete
+                status: .pending
             ),
             Job(
                 clientName: "Priya Sharma",
                 address: "30 Pitt St, Sydney NSW 2000",
                 date: today,
                 notes: "Weed removal and fertiliser application",
-                status: .pending
+                status: .complete
             ),
             Job(
                 clientName: "Liam Foster",

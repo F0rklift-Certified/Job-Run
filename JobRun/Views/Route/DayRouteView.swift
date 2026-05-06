@@ -97,7 +97,7 @@ struct DayRouteView: View {
         VStack {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundStyle(.blue)
+                .foregroundStyle(.green)
             Text(value)
                 .font(.headline)
             Text(label)
@@ -118,7 +118,7 @@ struct DayRouteView: View {
                 HStack(spacing: 12) {
                     ZStack {
                         Circle()
-                            .fill(.blue)
+                            .fill(.green)
                             .frame(width: 28, height: 28)
                         Text("\(index + 1)")
                             .font(.caption.bold())
@@ -137,6 +137,17 @@ struct DayRouteView: View {
 
                     Image(systemName: job.status.icon)
                         .foregroundStyle(job.status.color)
+
+                    Button {
+                        openDirections(to: job.address)
+                    } label: {
+                        Text("Go")
+                            .font(.subheadline.bold())
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 6)
+                            .background(.green, in: Capsule())
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 6)
@@ -145,13 +156,13 @@ struct DayRouteView: View {
                     if let result = routeVM.routeResult, index < result.legs.count {
                         HStack(spacing: 12) {
                             Rectangle()
-                                .fill(.blue.opacity(0.3))
+                                .fill(.green.opacity(0.3))
                                 .frame(width: 2, height: 20)
                                 .padding(.leading, 13)
 
                             Text("\(result.legs[index].distance) · \(result.legs[index].duration)")
                                 .font(.caption2)
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(.green)
                         }
                     } else {
                         HStack {
@@ -174,10 +185,16 @@ struct DayRouteView: View {
                 .font(.subheadline.bold())
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
-                .background(.blue, in: RoundedRectangle(cornerRadius: 10))
+                .background(.green, in: RoundedRectangle(cornerRadius: 10))
                 .foregroundStyle(.white)
         }
         .padding(.horizontal)
+    }
+
+    private func openDirections(to address: String) {
+        guard let encoded = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "http://maps.apple.com/?daddr=\(encoded)") else { return }
+        UIApplication.shared.open(url)
     }
 
     private func openInMaps() {

@@ -29,7 +29,7 @@ struct CalendarView: View {
                     }
 
                     WeekStripView(selectedDate: $selectedDate)
-                        .background(Color.white)
+                        .background(Color(.systemBackground))
                     Divider()
                         .overlay(Color(.systemGray5))
                     contentSection
@@ -86,7 +86,7 @@ struct CalendarView: View {
         .padding(.horizontal, 20)
         .padding(.top, 20)
         .padding(.bottom, 16)
-        .background(Color.white)
+        .background(Color(.systemBackground))
     }
 
     // MARK: - Content
@@ -130,7 +130,7 @@ struct CalendarView: View {
                     .foregroundStyle(.green)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 14)
-                    .background(Color.white)
+                    .background(Color(.systemBackground))
                 }
                 Divider()
                     .padding(.leading, 20)
@@ -171,7 +171,7 @@ struct CalendarView: View {
             .padding(.horizontal)
             .padding(.bottom, 12)
         }
-        .background(Color.white)
+        .background(Color(.systemBackground))
     }
 
     // MARK: - FAB

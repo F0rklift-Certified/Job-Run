@@ -20,10 +20,13 @@ struct JobRunApp: App {
         _jobStore = State(initialValue: store)
     }
 
+    @AppStorage("appearanceMode") private var appearanceMode: AppearanceMode = .system
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(jobStore)
+                .preferredColorScheme(appearanceMode.colorScheme)
         }
     }
 }

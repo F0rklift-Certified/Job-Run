@@ -17,7 +17,7 @@ struct RouteMapView: View {
         Map(position: $position) {
             if !routeResult.polylineCoordinates.isEmpty {
                 MapPolyline(coordinates: routeResult.polylineCoordinates)
-                    .stroke(.blue, lineWidth: 4)
+                    .stroke(.green, lineWidth: 4)
             }
 
             ForEach(Array(routeResult.stopCoordinates.enumerated()), id: \.offset) { index, coord in
@@ -40,7 +40,7 @@ struct RouteMapView: View {
                     Annotation("Stop \(stopNumber)", coordinate: coord) {
                         ZStack {
                             Circle()
-                                .fill(.blue)
+                                .fill(.green)
                                 .frame(width: 28, height: 28)
                             Text("\(stopNumber)")
                                 .font(.caption2.bold())

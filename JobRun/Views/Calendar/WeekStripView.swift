@@ -83,7 +83,7 @@ struct WeekStripView: View {
                         .frame(width: 44, height: 72)
                         .background {
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(isSelected ? Color.green : Color.white)
+                                .fill(isSelected ? Color.green : Color(.secondarySystemGroupedBackground))
                             if !isSelected {
                                 RoundedRectangle(cornerRadius: 12)
                                     .stroke(Color(.systemGray5), lineWidth: 1)
