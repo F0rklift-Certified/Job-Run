@@ -130,6 +130,7 @@ struct JobFormView: View {
         }
         .navigationTitle(isEditing ? "Edit Job" : "New Job")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(isEditing)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 if !isEditing {

@@ -31,6 +31,7 @@ class PlacesService {
         components.queryItems = [
             URLQueryItem(name: "input", value: query),
             URLQueryItem(name: "types", value: "address"),
+            URLQueryItem(name: "components", value: "country:au"),
             URLQueryItem(name: "key", value: apiKey)
         ]
 

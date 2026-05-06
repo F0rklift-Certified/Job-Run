@@ -10,6 +10,7 @@ import SwiftUI
 struct DayRouteView: View {
     @Environment(JobStore.self) private var jobStore
     @State private var routeVM = RouteViewModel()
+    @State private var editingJob: Job?
     let date: Date
     private let previewRouteResult: RouteResult?
 
@@ -61,6 +62,11 @@ struct DayRouteView: View {
                 routeVM.routeResult = preview
             } else if !dayJobs.isEmpty {
                 await routeVM.calculateRoute(for: dayJobs)
+            }
+        }
+        .sheet(item: $editingJob) { job in
+            NavigationStack {
+                JobFormView(existingJob: job)
             }
         }
         .overlay {
@@ -148,6 +154,10 @@ struct DayRouteView: View {
                             .padding(.vertical, 6)
                             .background(.green, in: Capsule())
                     }
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    editingJob = job
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 6)
