@@ -19,11 +19,11 @@ This app requires a Google Maps API key with the **Directions API** and **Places
 
 1. Get a key from the [Google Cloud Console](https://console.cloud.google.com/)
 2. Enable the **Directions API** and **Places API** for your project
-3. Create the secrets config file:
+3. Create `JobRun/Configurations/Secrets.xcconfig` with the following content:
    ```
-   cp JobRun/Configurations/Secrets.xcconfig.example JobRun/Configurations/Secrets.xcconfig
+   GOOGLE_MAPS_API_KEY = YOUR_API_KEY_HERE
    ```
-4. Open `JobRun/Configurations/Secrets.xcconfig` and replace `YOUR_API_KEY_HERE` with your key
+4. Replace `YOUR_API_KEY_HERE` with your key
 
 ### Build
 
@@ -33,7 +33,7 @@ This app requires a Google Maps API key with the **Directions API** and **Places
 
 ### Mock Data
 
-In debug builds, the app automatically seeds 10 sample jobs when the store is empty. To reset to mock data, erase the simulator (**Device > Erase All Content and Settings**) and re-run.
+In debug builds, the app automatically loads 26 sample jobs on every launch. These cover several days around the current date and include a mix of pending, complete and cancelled statuses.
 
 ## Requirements
 
@@ -50,6 +50,7 @@ JobRun/
 ├── Models/
 │   └── Job.swift               # Job data model
 ├── Services/
+│   ├── MockDataService.swift   # Sample job data for previews and debug builds
 │   ├── PlacesService.swift     # Google Places Autocomplete API client
 │   ├── RouteService.swift      # Google Maps Directions API client
 │   └── StorageService.swift    # Local persistence
